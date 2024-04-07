@@ -60,6 +60,7 @@ class Property(models.Model):
     width = models.PositiveSmallIntegerField(blank=True, null=True)
     length = models.PositiveSmallIntegerField(blank=True, null=True)
     price = models.IntegerField()
+    for_sale = models.BooleanField(default=False)
     caution = models.IntegerField(default=0, blank=True)
     created_date = models.DateField(auto_now_add=True)
 

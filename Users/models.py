@@ -11,6 +11,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(unique=True, max_length=10)
     isVerified = models.BooleanField(default=False)
+    rating = models.PositiveSmallIntegerField()
     profile_picture = models.FileField(upload_to="profilePics", blank= True, null=True)
 
     USERNAME_FIELD = "phone"

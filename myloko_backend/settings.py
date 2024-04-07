@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-r9#712f@!ipghjbu0#58g+ps$80w1=bn2e#l_#u&9$6az7w@+&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.107.212',"localhost"]
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     "Users",
     "Properties",
     "Payments",
@@ -53,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'myloko_backend.urls'
@@ -143,8 +146,10 @@ AUTH_USER_MODEL = "Users.CustomUser"
 MEDIA_URL = "uploads/"
 
 MEDIA_ROOT =  os.path.join(BASE_DIR, "uploads") 
-
-
+CORS_ALLOW_ALL_ORIGINS = True 
+CORS_ALLOWED_ORIGINS = [
+    'http://192.168.107.212:8081',
+]
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),

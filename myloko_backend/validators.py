@@ -1,4 +1,5 @@
 from os.path import splitext
+from rest_framework import serializers
 
 def validateMedia(media, type: str):
     name, extension = splitext(media.name)

@@ -4,7 +4,11 @@ from .views import (ListProperty,
                     ListCategory,
                     ListAmenity, 
                     ListCreateApartment, 
-                    RetrieveUpdateDestroyApartment, AddInterested,ListMedia)
+                    RetrieveUpdateDestroyApartment, 
+                    AddInterested,
+                    ListMedia,
+                    RemoveMedia
+                    )
 
 
 urlpatterns = [
@@ -12,8 +16,8 @@ urlpatterns = [
     path('property/apartment/', ListCreateApartment.as_view()),
     path('property/apartment/<int:pk>/', RetrieveUpdateDestroyApartment.as_view(), name='apartment_detail'),
     path('property/apartment/<int:pk>/interested', AddInterested),
-    path('location/', ListLocation.as_view()),
-    path('category/', ListCategory.as_view()),
-    path('amenity/', ListAmenity.as_view()),
-    path('media/', ListMedia.as_view()),
+    path('locations/', ListLocation.as_view()),
+    path('categories/', ListCategory.as_view()),
+    path('amenities/', ListAmenity.as_view()),
+    path('media/',RemoveMedia),
 ]

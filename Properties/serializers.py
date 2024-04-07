@@ -57,6 +57,7 @@ class ApartmentSerializer (serializers.ModelSerializer):
             "location",
             "area",
             "street" ,
+            "for_sale",
             "posted_by", 
             "is_interested,"
             "amenities" ,
@@ -82,7 +83,8 @@ class ApartmentSerializer (serializers.ModelSerializer):
         file = Media.objects.filter(property=obj.id, is_video=True).first()
         
         if file:
-            return "/uploads/" + file.file.name #Media.objects.get(property=obj, is_video=True).file
+        
+            return "uploads/" + file.file.name #Media.objects.get(property=obj, is_video=True).file
         else:
             return "/noimage"
     
@@ -91,18 +93,19 @@ class ApartmentSerializer (serializers.ModelSerializer):
         file = Media.objects.filter(property=obj.id, is_primary=True).first()
         
         if file:
-            return "/uploads/" + file.file.name #Media.objects.get(property=obj, is_video=True).file
+            return "uploads/" + file.file.name #Media.objects.get(property=obj, is_video=True).file
         else:
             return "/noimage"
     
     def get_images_link(self, obj):
-        files = Media.objects.filter(property=obj.id, is_primary=False, is_video=False)
+        files = Media.objects.filter(property=obj.id, is_video=False)
+     
         list = []
         if files:
             
             for file in files.values():
-                list.append("/uploads/" + file.get("file"))
-        # print("LIst" + list)
+                list.append("uploads/property/" + file.get("file"))
+            # print("LIst..............." + file.get("file") )
         return list
     
     def get_is_interested(self, obj):
@@ -125,6 +128,18 @@ class ApartmentSerializer (serializers.ModelSerializer):
             validateMedia(media=image , type="image")
         return value
     
+class ApartmentRUDSerializer(ApartmentSerializer):
+    video =  serializers.FileField(write_only=True, required=False)
+    images = serializers.ListField(child=serializers.FileField(max_length=10000, allow_empty_file=False, use_url=False), write_only=True, required=False)
+    images_delete = serializers.ListField(child=serializers.IntegerField(), write_only=True, required=False)
+    primary_image = serializers.FileField(max_length=10000, allow_empty_file=False, use_url=False, write_only=True, required=False)
     
-      
-
+    def get_images_link(self, obj):
+        files = Media.objects.filter(property=obj.id, is_primary=False, is_video=False)
+        list = []
+        if files:
+            
+            for file in files.values():
+                list.append({"url": "/uploads/" + file.get("file"), "id": file.get("id") })
+        # print("LIst" + list)
+        return list

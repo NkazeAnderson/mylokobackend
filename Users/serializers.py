@@ -8,7 +8,7 @@ class UserSerializer (serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-           "phone", "password", "email", "first_name", "last_name",  "id", "profile_picture"
+           "phone", "password", "email", "first_name", "last_name",  "id", "profile_picture", "rating"
         ]
         
     def validate(self, attrs):
@@ -17,3 +17,12 @@ class UserSerializer (serializers.ModelSerializer):
         if len(password) < 8:
             raise serializers.ValidationError({"password": "Password too short"})
         return attrs
+
+class UserFullSerializer (serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = [
+           "phone", "email", "first_name", "last_name",  "id", "profile_picture", "rating"
+        ]
+   
