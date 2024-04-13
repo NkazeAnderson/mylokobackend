@@ -32,6 +32,7 @@ class RetrieveUpdateDestroy (generics.RetrieveUpdateDestroyAPIView):
 class RetrieveFull (generics.ListAPIView):
     serializer_class = UserFullSerializer
     permission_classes = [permissions.AllowAny]
+    pagination_class = None
 
     def get_queryset(self):
         print("self.request..............")

@@ -70,10 +70,10 @@ class ApartmentSerializer (serializers.ModelSerializer):
             "caution",
             "created_date"]
         read_only_fields = ["posted_by"]
-        extra_kwargs = {
-            "amenities": {"write_only": True},
-            "location": {"write_only": True},
-        }
+        # extra_kwargs = {
+        #     "amenities": {"write_only": True},
+        #     "location": {"write_only": True},
+        # }
     
     def get_interested_users_count(self, obj):
         return obj.interested_users.count()
@@ -86,7 +86,7 @@ class ApartmentSerializer (serializers.ModelSerializer):
         
             return "uploads/" + file.file.name #Media.objects.get(property=obj, is_video=True).file
         else:
-            return "/noimage"
+            return "noimage"
     
     def get_primary_link(self, obj):
        
@@ -95,7 +95,7 @@ class ApartmentSerializer (serializers.ModelSerializer):
         if file:
             return "uploads/" + file.file.name #Media.objects.get(property=obj, is_video=True).file
         else:
-            return "/noimage"
+            return "noimage"
     
     def get_images_link(self, obj):
         files = Media.objects.filter(property=obj.id, is_video=False)
@@ -133,7 +133,8 @@ class ApartmentRUDSerializer(ApartmentSerializer):
     images = serializers.ListField(child=serializers.FileField(max_length=10000, allow_empty_file=False, use_url=False), write_only=True, required=False)
     images_delete = serializers.ListField(child=serializers.IntegerField(), write_only=True, required=False)
     primary_image = serializers.FileField(max_length=10000, allow_empty_file=False, use_url=False, write_only=True, required=False)
-    
+    new_primary = serializers.IntegerField(required=False, write_only=True)
+    primary_deleted = serializers.BooleanField(required=False, write_only=True)
     def get_images_link(self, obj):
         files = Media.objects.filter(property=obj.id, is_primary=False, is_video=False)
         list = []
