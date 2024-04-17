@@ -34,6 +34,7 @@ class ListCreateApartment(generics.ListCreateAPIView):
     queryset = Property.objects.all().order_by("-id")
     serializer_class = ApartmentSerializer
     parser_classes = [parsers.FormParser, parsers.MultiPartParser]
+    
 
     
     def perform_create(self, serializer):
@@ -54,7 +55,7 @@ class ListCreateApartment(generics.ListCreateAPIView):
         return super().post(request,  *args, **kwargs)
     
     def get_queryset(self):
-        print("")
+        print("Getting query")
         q = Property.objects.all().order_by("-id")
         try:
          queryPrice =  int(self.request.query_params["price"]) 
@@ -64,19 +65,19 @@ class ListCreateApartment(generics.ListCreateAPIView):
         
         try:
          queryBed =  int(self.request.query_params["bed"]) 
-         q = q.filter(bed_rooms__lte = queryBed)
+         q = q.filter(bed_rooms__gte = queryBed)
         except:
             pass
         
         try:
          queryKitchen =  int(self.request.query_params["kitchen"]) 
-         q = q.filter(internal_kitchens__lte = queryKitchen)
+         q = q.filter(internal_kitchens__gte = queryKitchen)
         except:
             pass
         
         try:
          queryToilet =  int(self.request.query_params["toilet"]) 
-         q = q.filter(internal_toilets__lte = queryToilet)
+         q = q.filter(internal_toilets__gte = queryToilet)
         except:
             pass
         
@@ -85,11 +86,18 @@ class ListCreateApartment(generics.ListCreateAPIView):
          queryLocation =  self.request.query_params["location"]
          q = q.filter(Q(location__name__icontains = queryLocation) | Q(location__city__name__icontains = queryLocation)| Q(street__icontains = queryLocation))
         except:
-            print("err location")
             pass
         
-        
-        
+        return q
+
+
+class GetInterested(generics.ListAPIView):
+    
+    serializer_class = ApartmentSerializer
+    pagination_class = None
+    
+    def get_queryset(self):
+        q = Property.objects.filter(interested_users__id = self.request.user.id)
         return q
     
     
@@ -222,6 +230,8 @@ def AddInterested(request, **kwargs):
         return Response({"action": "removed"}, status=status.HTTP_200_OK)
     except:  
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
     
 @api_view(["POST"])
 def RemoveMedia(request, **kwargs):

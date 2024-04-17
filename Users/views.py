@@ -42,10 +42,9 @@ class RetrieveFull (generics.ListAPIView):
     
 class ListProperties (generics.ListAPIView):
     serializer_class = ApartmentSerializer
-    queryset = Property.objects.filter(posted_by__pk = 9)
-
+    
+    pagination_class = None
     def get_queryset(self):
-        print(self.kwargs)
         return Property.objects.filter(posted_by__pk = self.kwargs["id"])
     
 
