@@ -25,4 +25,20 @@ class UserFullSerializer (serializers.ModelSerializer):
         fields = [
            "phone", "email", "first_name", "last_name",  "id", "profile_picture", "rating"
         ]
-   
+
+
+class UserUpdateSerializer (serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = [
+         "first_name", "last_name", 
+        ]
+
+class UserUpdatePicSerializer (serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ["profile_picture" ]
+        
+    

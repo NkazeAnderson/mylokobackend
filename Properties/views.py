@@ -235,9 +235,7 @@ def AddInterested(request, **kwargs):
     
 @api_view(["POST"])
 def RemoveMedia(request, **kwargs):
-    print(request.data)
     query = request.data
-    print(query["media"])
     try:
         for target in query["media"]:
             medias = Media.objects.get(pk=target)

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['192.168.141.212',"localhost"]
 # Application definition
 
 INSTALLED_APPS = [
+      "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    "channels",
+    "chats",
     "Users",
     "Properties",
     "Payments",
@@ -129,7 +132,7 @@ TIME_ZONE = 'Africa/Douala'
 USE_I18N = True
 
 USE_TZ = True
-
+from channels.layers import InMemoryChannelLayer
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -189,4 +192,12 @@ SIMPLE_JWT = {
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
+}
+
+ASGI_APPLICATION = "myloko_backend.asgi.application"
+
+#Update in Production
+CHANNEL_LAYERS= {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"    }
 }
