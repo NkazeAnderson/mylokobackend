@@ -35,8 +35,6 @@ class ListCreateApartment(generics.ListCreateAPIView):
     serializer_class = ApartmentSerializer
     parser_classes = [parsers.FormParser, parsers.MultiPartParser]
     
-
-    
     def perform_create(self, serializer):
         images = serializer.validated_data.pop("images")
         video = serializer.validated_data.pop("video")
@@ -49,9 +47,6 @@ class ListCreateApartment(generics.ListCreateAPIView):
             Media.objects.create(property=obj, file=media)
             
     def post(self, request, *args, **kwargs):
-        print(request.data)
-        print(".............")
-        print(self.request.content_type)
         return super().post(request,  *args, **kwargs)
     
     def get_queryset(self):

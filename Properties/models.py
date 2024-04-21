@@ -49,7 +49,7 @@ class Property(models.Model):
     description = models.CharField(max_length=250, blank=True, null=True)
     category= models.ForeignKey(Category, on_delete=models.CASCADE)
     location= models.ForeignKey(Area, on_delete=models.SET_NULL, null=True)
-    street = models.CharField(max_length=40)
+    street = models.CharField(max_length=40) 
     posted_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     interested_users = models.ManyToManyField(CustomUser, related_name="interestedUsers", blank=True)
     amenities = models.ManyToManyField(Amenity, blank=True)

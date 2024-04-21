@@ -20,10 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from Users import urls as UserUrls
 from Properties import urls as ProductUrls
-
+from chats import urls as ChatsUrls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(UserUrls)),
     path('api/', include(ProductUrls)),
+    path('api/', include(ChatsUrls)),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
