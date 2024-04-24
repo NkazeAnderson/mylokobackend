@@ -130,7 +130,6 @@ class RetrieveUpdateDestroyApartment(generics.RetrieveUpdateDestroyAPIView):
             primary_deleted = False
             
         instance = serializer.save()
-        print("images.........." , images)
         
         if primary_image and new_primary:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)

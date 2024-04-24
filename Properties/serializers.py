@@ -3,6 +3,8 @@ from rest_framework.reverse import reverse
 from .models import Property, Area, Amenity, Category, Media
 from Users.serializers import UserSerializer
 from myloko_backend.validators import validateMedia
+from chats.models import Conversation
+from django.db.models import Q
 
 class propertySerializer (serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
@@ -48,6 +50,7 @@ class ApartmentSerializer (serializers.ModelSerializer):
     primary_image = serializers.FileField(max_length=10000, allow_empty_file=False, use_url=False, write_only=True)
     primary_link = serializers.SerializerMethodField()
     images_link = serializers.SerializerMethodField()
+    chatId = serializers.SerializerMethodField()
     class Meta:
         model = Property
         exclude = ("width", "length", "interested_users",  "category")
@@ -77,6 +80,18 @@ class ApartmentSerializer (serializers.ModelSerializer):
     
     def get_interested_users_count(self, obj):
         return obj.interested_users.count()
+    
+    def get_chatId(self, obj):
+        try:
+            posted_by = obj.posted_by
+            print(posted_by)
+            user = self.context.get("request").user
+            conversation = Conversation.objects.filter(Q(first_member=posted_by, second_member=user)|Q(first_member=user, second_member=posted_by)).first()
+            print(conversation)
+            return conversation.id
+        except:
+            return None
+            
     
     def get_video_link(self, obj):
         

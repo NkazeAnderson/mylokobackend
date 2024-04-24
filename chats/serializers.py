@@ -29,15 +29,16 @@ class ConversationSerializer(serializers.ModelSerializer):
         except:
             raise serializers.ValidationError(detail="Invalid request", code=400)
     def get_unread_messages(self, obj):
-        return Message.objects.filter(conversation=obj.id, read=False).count()
+        user = self.context.get("request").user
+        return Message.objects.filter(conversation=obj.id, read=False).exclude(sender=user).count()
     
     def get_last_message(self, obj):
         try:
             lastMessage = Message.objects.filter(conversation = obj.id).last()
             print(lastMessage.photo)
             if not lastMessage.photo :
-                return {"is_photo": False, "message": lastMessage.message}
-            return {"is_photo": True}
+                return {"is_photo": False, "message": lastMessage.message, "date": lastMessage.created_date}
+            return {"is_photo": True,  "date": lastMessage.created_date}
         except:
             pass
     
@@ -45,9 +46,8 @@ class ConversationSerializer(serializers.ModelSerializer):
         data["first_member"] = self.context.get("request").user
         userId = self.context.get("request").user
         try:
-            print(data)
             otherMember = CustomUser.objects.get(pk=data["second_member"].id)
-            print(otherMember)
+            
         except:
            pass 
        
@@ -60,7 +60,7 @@ class ConversationSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ["message", "created_date", "sender", "conversation", "photo"]
+        fields = ["message", "created_date", "sender", "conversation", "photo", "read"]
         extra_kwargs = {
             "created_date": {"read_only": True},
             "sender": {"read_only": True},
